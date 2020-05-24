@@ -1,0 +1,4 @@
+.check:checked + span {
+  color: gray;
+  text-decoration: line-through;
+}
