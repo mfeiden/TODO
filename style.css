@@ -1,4 +1,37 @@
+body {
+  background-color: #fafafa;
+}
+
+#new {
+  max-width: 600px;
+}
+
+::placeholder {
+  font-style: italic;
+}
+
+#list {
+  background-color: #feffcd;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.4);
+  font-size: 20px;
+}
+
+@media (max-width: 767.9px) {
+  #list {
+    font-size: 16px;
+  }
+  h1 {
+    font-size: 32px;
+  }
+}
+
 .check:checked + span {
-  color: gray;
+  color: #c0c0c0;
   text-decoration: line-through;
+}
+
+button.remove {
+  color: gray;
+  background: none;
+  border: none;
 }
