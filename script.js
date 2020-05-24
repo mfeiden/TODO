@@ -1,4 +1,4 @@
-// underlying add-remove-update functions
+// function to update html
 var updateList = function() {
   $.ajax({
     type: 'GET',
@@ -7,7 +7,7 @@ var updateList = function() {
     success: function (response, textStatus) {
       $('#list').empty();
       response.tasks.forEach(function (task) {
-        $('#list').append('<tr><td><label class="check"><input type="checkbox" class="mr-2"><span>' + task.content + '</span></label></td><td><button class="remove bg-white" style="border:none" data-id="' + task.id + '"><i class="far fa-trash-alt fa-sm"></i></button></td></tr>');
+        $('#list').append('<tr><td class="col-11"><label><input type="checkbox" class="check mr-2" data-id="' + task.id + '"' + (task.completed ? 'checked' : '') + '><span>' + task.content + '</span></label></td><td><button class="remove bg-white" style="border:none" data-id="' + task.id + '"><i class="far fa-trash-alt fa-sm"></i></button></td></tr>');
       })
       console.log(response)
     },
@@ -17,6 +17,7 @@ var updateList = function() {
   });
 }
 
+// functions to add / delete tasks
 var addTask = function() {
   $.ajax({
     type: 'POST',
@@ -35,8 +36,8 @@ var addTask = function() {
     error: function (request, textStatus, errorMessage) {
       console.log(errorMessage);
     }
-  });
-}
+  })
+};
 
 var removeTask = function(id) {
   id = $(this).data('id');
@@ -50,20 +51,59 @@ var removeTask = function(id) {
       console.log(errorMessage);
     }
   })
-}
+};
+
+//functions to update task status
+var completed = function(id) {
+  $.ajax({
+    type: 'PUT',
+    url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks/' + id + '/mark_complete?api_key=160',
+    dataType: 'json',
+    success: function (response, textStatus) {
+      updateList();
+    },
+    error: function (request, textStatus, errorMessage) {
+      console.log(errorMessage);
+    }
+  })
+};
+
+var open = function(id) {
+  $.ajax({
+    type: 'PUT',
+    url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks/' + id + '/mark_active?api_key=160',
+    dataType: 'json',
+    success: function (response, textStatus) {
+      updateList();
+    },
+    error: function (request, textStatus, errorMessage) {
+      console.log(errorMessage);
+    }
+  })
+};
+
+
 
 // event handlers
 $(document).ready(function() {
   
   updateList();
+
+  $(document).on('click', '.remove', removeTask);
+
+  $(document).on('change', '.check', function() {
+    if (this.checked) {
+      completed($(this).data('id'));
+    } else {
+      open($(this).data('id'));
+    }
+  });
   
   $('#new').on('keyup', function(event) {
     event.preventDefault();
     if (event.key === 'Enter') {
       addTask();
     }
-  })
-
-  $(document).on('click', '.remove', removeTask);
+  });
 
 });
