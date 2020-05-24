@@ -1,3 +1,4 @@
+// underlying add-remove-update functions
 var updateList = function() {
   $.ajax({
     type: 'GET',
@@ -6,7 +7,7 @@ var updateList = function() {
     success: function (response, textStatus) {
       $('#list').empty();
       response.tasks.forEach(function (task) {
-        $('#list').append('<tr><td><label class="check"><input type="checkbox" class="mr-2"><span>' + task.content + '</span></label></td><td><button class="remove bg-white" style="border:none"><i class="far fa-trash-alt fa-sm"></i></button></td></tr>');
+        $('#list').append('<tr><td><label class="check"><input type="checkbox" class="mr-2"><span>' + task.content + '</span></label></td><td><button class="remove bg-white" style="border:none" data-id="' + task.id + '"><i class="far fa-trash-alt fa-sm"></i></button></td></tr>');
       })
       console.log(response)
     },
@@ -38,24 +39,22 @@ var addTask = function() {
 }
 
 var removeTask = function(id) {
+  id = $(this).data('id');
   $.ajax({
     type: 'DELETE',
-    url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=160',
+    url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks/' + id + '?api_key=160',
     success: function (response, textStatus) {
-      console.log(response);   
+      updateList();
     },
     error: function (request, textStatus, errorMessage) {
       console.log(errorMessage);
     }
-  
   })
-
 }
 
-
-
-
+// event handlers
 $(document).ready(function() {
+  
   updateList();
   
   $('#new').on('keyup', function(event) {
@@ -64,5 +63,7 @@ $(document).ready(function() {
       addTask();
     }
   })
+
+  $(document).on('click', '.remove', removeTask);
 
 });
