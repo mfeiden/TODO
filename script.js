@@ -7,9 +7,10 @@ var updateList = function() {
     success: function (response, textStatus) {
       $('#list').empty();
       response.tasks.forEach(function (task) {
-        $('#list').append('<tr><td class="col-11"><label><input type="checkbox" class="check mr-2" data-id="' + task.id + '"' + (task.completed ? 'checked' : '') + '><span>' + task.content + '</span></label></td><td><button class="remove bg-white" style="border:none" data-id="' + task.id + '"><i class="far fa-trash-alt fa-sm"></i></button></td></tr>');
+        $('#list').append('<tr><td class="col-11"><input type="checkbox" class="check mr-2" data-id="' + task.id + '"' + (task.completed ? 'checked' : '') + '><span>' + task.content + '</span></td><td><button class="remove" data-id="' + task.id + '"><i class="far fa-trash-alt fa-xs"></i></button></td></tr>');
       })
-      console.log(response)
+      $('#bottom p span').html($('input:checkbox:not(:checked)').length);
+      console.log(response);
     },
     error: function (request, textStatus, errorMessage) {
       console.log(errorMessage);
